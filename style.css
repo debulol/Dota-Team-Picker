@@ -1,0 +1,213 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+}
+
+/* 设置区域 */
+.setup-area {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.player-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.player-input input {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.player-input button {
+    padding: 12px 24px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.player-input button:hover {
+    background: #5568d3;
+}
+
+.player-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    min-height: 100px;
+}
+
+.player-tag {
+    background: #f0f0f0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.player-tag button {
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.start-btn {
+    width: 100%;
+    padding: 15px;
+    background: #26de81;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.start-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.start-btn:not(:disabled):hover {
+    background: #20bf6b;
+}
+
+/* 选人区域 */
+.teams {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.team {
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 200px;
+}
+
+.team1 {
+    background: #e3f2fd;
+    border: 3px solid #2196F3;
+}
+
+.team2 {
+    background: #ffebee;
+    border: 3px solid #f44336;
+}
+
+.team h2 {
+    margin-bottom: 15px;
+}
+
+.team-players {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.team-player {
+    background: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.draft-info {
+    text-align: center;
+    padding: 20px;
+    background: #fff3cd;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.draft-info h3 {
+    color: #856404;
+    font-size: 1.5em;
+}
+
+.available-players h3 {
+    margin-bottom: 15px;
+}
+
+.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.available-player {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.available-player:hover {
+    background: #e9ecef;
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+.available-player.selectable {
+    cursor: pointer;
+    border-color: #26de81;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.reset-btn:hover {
+    background: #ee5a52;
+}script.js
