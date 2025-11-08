@@ -1,0 +1,74 @@
+[
+  {
+    "name": "冥皇",
+    "avatar": "冥皇.jpg",
+    "position": "1号位",
+    "heroes": ["ursa", "sven", "razor"]
+  },
+  {
+    "name": "菠萝",
+    "avatar": "菠萝.jpg",
+    "position": "3号位",
+    "heroes": ["pangolier", "centaur", "slardar"]
+  },
+  {
+    "name": "Quintus",
+    "avatar": "Quintus.jpg",
+    "position": "3号位",
+    "heroes": ["shredder", "slardar", "axe"]
+  },
+  {
+    "name": "玩家4",
+    "avatar": "player4.jpg",
+    "position": "4号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家5",
+    "avatar": "player5.jpg",
+    "position": "5号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家6",
+    "avatar": "player6.jpg",
+    "position": "1号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家7",
+    "avatar": "player7.jpg",
+    "position": "2号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家8",
+    "avatar": "player8.jpg",
+    "position": "3号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家9",
+    "avatar": "player9.jpg",
+    "position": "4号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家10",
+    "avatar": "player10.jpg",
+    "position": "5号位",
+    "heroes": []
+  },
+  {
+    "name": "玩家11",
+    "avatar": "player11.jpg",
+    "position": "全能",
+    "heroes": []
+  },
+  {
+    "name": "玩家12",
+    "avatar": "player12.jpg",
+    "position": "2/3号位",
+    "heroes": []
+  }
+]

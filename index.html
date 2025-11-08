@@ -10,19 +10,26 @@
     <div class="container">
         <h1>🎮 DOTA 10人内战选人系统</h1>
         
-        <!-- 初始设置区域 -->
-        <div id="setupArea" class="setup-area">
-            <h2>设置玩家名单</h2>
-            <div class="player-input">
-                <input type="text" id="playerNameInput" placeholder="输入玩家名字">
-                <button onclick="addPlayer()">添加玩家</button>
+        <!-- 加载状态 -->
+        <div id="loadingArea" class="loading-area">
+            <div class="loading-spinner"></div>
+            <p>正在加载玩家数据...</p>
+        </div>
+
+        <!-- 选择参赛者 -->
+        <div id="selectionArea" class="area" style="display: none;">
+            <h2>✅ 选择本次参赛的10名玩家</h2>
+            <div class="selection-info">
+                已选择：<span id="selectedCount">0</span>/10
             </div>
-            <div id="playerList" class="player-list"></div>
-            <button onclick="startDraft()" class="start-btn" id="startBtn" disabled>开始选人</button>
+            <div id="playerSelection" class="player-selection"></div>
+            <button onclick="startDraft()" class="start-btn" id="startDraftBtn" disabled>
+                开始选人 →
+            </button>
         </div>
 
         <!-- 选人区域 -->
-        <div id="draftArea" class="draft-area" style="display: none;">
+        <div id="draftArea" class="area" style="display: none;">
             <div class="teams">
                 <div class="team team1">
                     <h2>🔵 蓝队</h2>
@@ -43,7 +50,14 @@
                 <div id="availablePlayers" class="player-grid"></div>
             </div>
 
-            <button onclick="resetDraft()" class="reset-btn">重新开始</button>
+            <button onclick="resetToSelection()" class="reset-btn">← 重新选择参赛者</button>
+        </div>
+
+        <!-- 错误提示 -->
+        <div id="errorArea" class="error-area" style="display: none;">
+            <h2>❌ 加载失败</h2>
+            <p id="errorMessage"></p>
+            <button onclick="location.reload()" class="retry-btn">重新加载</button>
         </div>
     </div>
 

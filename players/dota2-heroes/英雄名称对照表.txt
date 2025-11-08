@@ -1,0 +1,125 @@
+## 📝 常用英雄 ID 对照表
+```
+敌法师: antimage
+斧王: axe
+祸乱之源: bane
+血魔: bloodseeker
+水晶室女: crystal_maiden
+卓尔游侠: drow_ranger
+撼地者: earthshaker
+主宰: juggernaut
+米拉娜: mirana
+变体精灵: morphling
+影魔: nevermore (或 shadow_fiend)
+幻影刺客: phantom_assassin
+帕克: puck
+帕吉/屠夫: pudge
+剃刀: razor
+沙王: sand_king
+风暴之灵: storm_spirit
+斯温: sven
+小小: tiny
+复仇之魂: vengefulspirit
+风行者: windrunner (或 windranger)
+宙斯: zuus (注意是两个u)
+昆卡: kunkka
+莉娜: lina
+莱恩: lion
+暗影萨满: shadow_shaman
+斯拉达: slardar
+潮汐猎人: tidehunter
+巫医: witch_doctor
+巫妖: lich
+谜团: enigma
+修补匠: tinker
+狙击手: sniper
+瘟疫法师: necrolyte (或 necrophos)
+术士: warlock
+兽王: beastmaster
+痛苦女王: queenofpain
+剧毒术士: venomancer
+虚空假面: faceless_void
+冥魂大帝: skeleton_king (或 wraith_king)
+死亡先知: death_prophet
+帕格纳: pugna
+圣堂刺客: templar_assassin
+冥界亚龙: viper
+露娜: luna
+龙骑士: dragon_knight
+戴泽: dazzle
+发条技师: rattletrap (或 clockwerk)
+拉席克: leshrac
+先知: furion (或 natures_prophet)
+噬魂鬼: life_stealer (或 lifestealer)
+黑暗贤者: dark_seer
+克林克兹: clinkz
+全能骑士: omniknight
+魅惑魔女: enchantress
+哈斯卡: huskar
+暗夜魔王: night_stalker
+育母蜘蛛: broodmother
+赏金猎人: bounty_hunter
+编织者: weaver
+杰奇洛: jakiro
+蝙蝠骑士: batrider
+陈: chen
+幽鬼: spectre
+远古冰魄: ancient_apparition
+末日使者: doom_bringer (或 doom)
+熊战士: ursa
+裂魂人: spirit_breaker
+矮人直升机: gyrocopter
+炼金术士: alchemist
+祈求者: invoker
+沉默术士: silencer
+殁境神蚀者: obsidian_destroyer (或 outworld_destroyer)
+狼人: lycan (或 lycanthrope)
+酒仙: brewmaster
+暗影恶魔: shadow_demon
+德鲁伊: lone_druid
+混沌骑士: chaos_knight
+米波: meepo
+树精卫士: treant
+食人魔魔法师: ogre_magi
+不朽尸王: undying
+拉比克: rubick
+干扰者: disruptor
+司夜刺客: nyx_assassin
+娜迦海妖: naga_siren
+光之守卫: keeper_of_the_light
+艾欧: wisp (或 io)
+维萨吉: visage
+斯拉克: slark
+美杜莎: medusa
+巨魔战将: troll_warlord
+半人马战行者: centaur (或 centaur_warrunner)
+马格纳斯: magnataur (或 magnus)
+伐木机: shredder (或 timbersaw)
+钢背兽: bristleback
+巨牙海民: tusk
+天怒法师: skywrath_mage
+亚巴顿: abaddon
+上古巨神: elder_titan
+军团指挥官: legion_commander
+工程师: techies
+灰烬之灵: ember_spirit
+大地之灵: earth_spirit
+孽主: abyssal_underlord (或 underlord)
+恐怖利刃: terrorblade
+凤凰: phoenix
+神谕者: oracle
+寒冬飞龙: winter_wyvern
+天穹守望者: arc_warden
+齐天大圣: monkey_king
+邪影芳灵: dark_willow
+石鳞剑士: pangolier
+天涯墨客: grimstroke
+森海飞霞: hoodwink
+虚无之灵: void_spirit
+电炎绝手: snapfire
+玛尔斯: mars
+破晓辰星: dawnbreaker
+玛西: marci
+勇士: primal_beast
+奶绿: muerta
+马戏大王: ringmaster
