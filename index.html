@@ -16,20 +16,22 @@
             <p>正在加载玩家数据...</p>
         </div>
 
-        <!-- 第1步：选择参赛者 -->
-        <div id="selectionArea" class="area" style="display: none;">
-            <h2>✅ 选择本次参赛的10名玩家</h2>
-            <div class="selection-info">
-                已选择：<span id="selectedCount">0</span>/10
-            </div>
+        <!-- 第1步：选择我的玩家 -->
+        <div id="selectMeArea" class="area" style="display: none;">
+            <h2>👤 选择你的玩家</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 20px;">
+                从下方选择你要扮演的玩家
+            </p>
             <div id="playerSelection" class="player-selection"></div>
-            <button onclick="goToRoomSetup()" class="start-btn" id="startDraftBtn" disabled>
-                下一步：创建/加入房间 →
-            </button>
         </div>
 
         <!-- 第2步：房间设置 -->
         <div id="roomSetupArea" class="area" style="display: none;">
+            <div class="my-player-display">
+                <h3>你的玩家：</h3>
+                <div id="myPlayerCard"></div>
+            </div>
+            
             <h2>🏠 创建或加入房间</h2>
             <div class="room-setup">
                 <div class="room-option">
@@ -43,23 +45,23 @@
                     <button onclick="joinRoom()" class="room-btn join-btn">加入房间</button>
                 </div>
             </div>
-            <button onclick="backToSelection()" class="back-btn">← 返回选择参赛者</button>
+            <button onclick="backToSelectMe()" class="back-btn">← 重新选择玩家</button>
         </div>
 
         <!-- 第3步：等待房间 -->
         <div id="waitingArea" class="area" style="display: none;">
-            <h2>⏳ 等待房间准备</h2>
+            <h2>⏳ 等待玩家加入</h2>
             <div class="room-info">
                 <div class="room-id-display">
                     房间ID: <strong id="currentRoomId">------</strong>
                     <button onclick="copyRoomId()" class="copy-btn">📋 复制</button>
                 </div>
                 <div class="participants-info">
-                    <h3>当前在线 (<span id="participantCount">0</span>/10)</h3>
-                    <div id="participantsList" class="participants-list"></div>
+                    <h3>已加入玩家 (<span id="participantCount">0</span>/10)</h3>
+                    <div id="participantsList" class="participants-grid"></div>
                 </div>
             </div>
-            <button onclick="startRoll()" class="start-btn" id="startRollBtn">开始 Roll 点选队长 🎲</button>
+            <button onclick="startRoll()" class="start-btn" id="startRollBtn" disabled>开始 Roll 点选队长 🎲</button>
             <button onclick="leaveRoom()" class="leave-btn">离开房间</button>
         </div>
 
