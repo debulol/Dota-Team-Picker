@@ -27,6 +27,13 @@ h1 {
     font-size: 2.5em;
 }
 
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-align: center;
+}
+
 /* 加载动画 */
 .loading-area {
     text-align: center;
@@ -84,13 +91,6 @@ h1 {
     to { opacity: 1; transform: translateY(0); }
 }
 
-h2 {
-    color: #333;
-    margin-bottom: 20px;
-    font-size: 1.8em;
-    text-align: center;
-}
-
 /* 选择参赛者 */
 .selection-info {
     text-align: center;
@@ -144,7 +144,6 @@ h2 {
     color: white;
 }
 
-/* 玩家头像区域 */
 .player-card .avatar-section {
     text-align: center;
     margin-bottom: 12px;
@@ -184,7 +183,6 @@ h2 {
     background: rgba(255, 255, 255, 0.3);
 }
 
-/* 偏好英雄区域 */
 .player-card .heroes-section {
     margin-top: 12px;
     padding-top: 12px;
@@ -212,7 +210,6 @@ h2 {
     gap: 6px;
 }
 
-/* 英雄图标样式 */
 .hero-icon {
     width: 40px;
     height: 40px;
@@ -231,15 +228,6 @@ h2 {
     object-fit: cover;
 }
 
-.hero-icon-medium {
-    width: 60px;
-    height: 60px;
-    border-radius: 6px;
-    border: 2px solid #ddd;
-    background: #000;
-    object-fit: cover;
-}
-
 .hero-icon-tiny {
     width: 32px;
     height: 32px;
@@ -253,27 +241,286 @@ h2 {
     border-color: white;
 }
 
-/* 按钮 */
-.start-btn {
-    width: 100%;
-    padding: 15px;
-    background: #26de81;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
+/* 房间设置 */
+.room-setup {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 30px;
+    align-items: center;
+    max-width: 800px;
+    margin: 40px auto;
 }
 
-.start-btn:disabled {
+.room-option {
+    text-align: center;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.room-option h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.room-divider {
+    font-size: 24px;
+    font-weight: bold;
+    color: #999;
+}
+
+.room-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.create-btn {
+    background: #26de81;
+    color: white;
+}
+
+.create-btn:hover {
+    background: #20bf6b;
+}
+
+.join-btn {
+    background: #667eea;
+    color: white;
+    margin-top: 10px;
+}
+
+.join-btn:hover {
+    background: #5568d3;
+}
+
+#roomIdInput {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* 等待房间 */
+.room-info {
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.room-id-display {
+    text-align: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.room-id-display strong {
+    color: #667eea;
+    font-size: 32px;
+    letter-spacing: 3px;
+}
+
+.copy-btn {
+    margin-left: 10px;
+    padding: 8px 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.participants-info h3 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.participants-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.participant-item {
+    padding: 10px;
+    background: #e8f5e9;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.participant-item.ready {
+    background: #26de81;
+    color: white;
+}
+
+/* Roll 点区域 */
+.roll-info {
+    text-align: center;
+    padding: 20px;
+    background: #fff3cd;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.roll-section {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.roll-btn {
+    padding: 20px 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.roll-btn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.roll-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
 }
 
-.start-btn:not(:disabled):hover {
-    background: #20bf6b;
+.my-roll {
+    margin-top: 20px;
+    font-size: 48px;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.roll-results {
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.roll-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.roll-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #ddd;
+}
+
+.roll-item.captain {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-left-color: #ffa000;
+    font-weight: bold;
+}
+
+.roll-item .player-name {
+    font-size: 18px;
+}
+
+.roll-item .roll-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #667eea;
+}
+
+.roll-item.captain .roll-value {
+    color: #ff6b00;
+}
+
+.captains-announcement {
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    border-radius: 12px;
+    margin-top: 30px;
+}
+
+#captainsDisplay {
+    font-size: 20px;
+    margin-top: 15px;
+    line-height: 1.8;
+}
+
+/* 队长选择 */
+.captain-choice-info {
+    text-align: center;
+    padding: 20px;
+    background: #fff3cd;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.choice-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+.choice-btn {
+    padding: 30px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.choice-btn:hover:not(:disabled) {
+    background: #5568d3;
+    transform: translateY(-5px);
+}
+
+.choice-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.choice-result {
+    text-align: center;
+    padding: 20px;
+    background: #e8f5e9;
+    border-radius: 12px;
+    margin-top: 20px;
+    font-size: 18px;
+}
+
+.order-choice-info {
+    text-align: center;
+    padding: 20px;
+    background: #fff3cd;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    font-size: 18px;
 }
 
 /* 选人区域 */
@@ -362,6 +609,7 @@ h2 {
 
 .available-players h3 {
     margin-bottom: 15px;
+    text-align: center;
 }
 
 .player-grid {
@@ -383,6 +631,11 @@ h2 {
     background: #e9ecef;
     border-color: #667eea;
     transform: translateY(-2px);
+}
+
+.available-player.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .available-player .avatar-medium {
@@ -417,30 +670,63 @@ h2 {
     gap: 4px;
 }
 
-.reset-btn {
+/* 按钮样式 */
+.start-btn, .back-btn, .leave-btn {
     width: 100%;
-    padding: 12px;
-    background: #ff6b6b;
-    color: white;
+    padding: 15px;
     border: none;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background 0.3s;
     margin-top: 20px;
 }
 
-.reset-btn:hover {
+.start-btn {
+    background: #26de81;
+    color: white;
+}
+
+.start-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.start-btn:not(:disabled):hover {
+    background: #20bf6b;
+}
+
+.back-btn {
+    background: #95a5a6;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #7f8c8d;
+}
+
+.leave-btn {
+    background: #ff6b6b;
+    color: white;
+}
+
+.leave-btn:hover {
     background: #ee5a52;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-    .teams {
+    .teams, .room-setup, .choice-buttons {
         grid-template-columns: 1fr;
     }
     
     .player-selection {
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+    
+    .room-divider {
+        transform: rotate(90deg);
     }
     
     h1 {

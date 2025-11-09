@@ -16,27 +16,115 @@
             <p>正在加载玩家数据...</p>
         </div>
 
-        <!-- 选择参赛者 -->
+        <!-- 第1步：选择参赛者 -->
         <div id="selectionArea" class="area" style="display: none;">
             <h2>✅ 选择本次参赛的10名玩家</h2>
             <div class="selection-info">
                 已选择：<span id="selectedCount">0</span>/10
             </div>
             <div id="playerSelection" class="player-selection"></div>
-            <button onclick="startDraft()" class="start-btn" id="startDraftBtn" disabled>
-                开始选人 →
+            <button onclick="goToRoomSetup()" class="start-btn" id="startDraftBtn" disabled>
+                下一步：创建/加入房间 →
             </button>
         </div>
 
-        <!-- 选人区域 -->
+        <!-- 第2步：房间设置 -->
+        <div id="roomSetupArea" class="area" style="display: none;">
+            <h2>🏠 创建或加入房间</h2>
+            <div class="room-setup">
+                <div class="room-option">
+                    <h3>创建新房间</h3>
+                    <button onclick="createRoom()" class="room-btn create-btn">创建房间</button>
+                </div>
+                <div class="room-divider">或</div>
+                <div class="room-option">
+                    <h3>加入现有房间</h3>
+                    <input type="text" id="roomIdInput" placeholder="输入房间ID (6位)" maxlength="6">
+                    <button onclick="joinRoom()" class="room-btn join-btn">加入房间</button>
+                </div>
+            </div>
+            <button onclick="backToSelection()" class="back-btn">← 返回选择参赛者</button>
+        </div>
+
+        <!-- 第3步：等待房间 -->
+        <div id="waitingArea" class="area" style="display: none;">
+            <h2>⏳ 等待房间准备</h2>
+            <div class="room-info">
+                <div class="room-id-display">
+                    房间ID: <strong id="currentRoomId">------</strong>
+                    <button onclick="copyRoomId()" class="copy-btn">📋 复制</button>
+                </div>
+                <div class="participants-info">
+                    <h3>当前在线 (<span id="participantCount">0</span>/10)</h3>
+                    <div id="participantsList" class="participants-list"></div>
+                </div>
+            </div>
+            <button onclick="startRoll()" class="start-btn" id="startRollBtn">开始 Roll 点选队长 🎲</button>
+            <button onclick="leaveRoom()" class="leave-btn">离开房间</button>
+        </div>
+
+        <!-- 第4步：Roll点选队长 -->
+        <div id="rollArea" class="area" style="display: none;">
+            <h2>🎲 Roll 点选队长</h2>
+            <div class="roll-info">
+                <p>每位玩家点击下方按钮进行 Roll 点（000-100），点数最大的两位成为队长！</p>
+            </div>
+            <div class="roll-section">
+                <button onclick="rollDice()" class="roll-btn" id="rollBtn">🎲 Roll 点</button>
+                <div class="my-roll" id="myRoll">等待 Roll 点...</div>
+            </div>
+            <div class="roll-results">
+                <h3>Roll 点结果</h3>
+                <div id="rollResultsList" class="roll-list"></div>
+            </div>
+            <div id="captainsAnnouncement" class="captains-announcement" style="display: none;">
+                <h3>🎉 队长已产生！</h3>
+                <div id="captainsDisplay"></div>
+            </div>
+        </div>
+
+        <!-- 第5步：队长选择优先权 -->
+        <div id="captainChoiceArea" class="area" style="display: none;">
+            <h2>👑 队长选择</h2>
+            <div class="captain-choice-info">
+                <p>队长 <strong id="firstCaptainName"></strong>（Roll 点: <span id="firstCaptainRoll"></span>）请选择：</p>
+            </div>
+            <div class="choice-buttons">
+                <button onclick="captainChoose('order')" class="choice-btn" id="choiceOrderBtn">
+                    📋 决定选人顺序
+                </button>
+                <button onclick="captainChoose('side')" class="choice-btn" id="choiceSideBtn">
+                    ⚔️ 决定队伍阵营
+                </button>
+            </div>
+            <div id="captainChoiceResult" class="choice-result" style="display: none;"></div>
+        </div>
+
+        <!-- 第6步：选择先后手 -->
+        <div id="orderChoiceArea" class="area" style="display: none;">
+            <h2>📋 选择选人顺序</h2>
+            <div class="order-choice-info">
+                <p>队长 <strong id="orderCaptainName"></strong> 请选择：</p>
+            </div>
+            <div class="choice-buttons">
+                <button onclick="chooseOrder('first')" class="choice-btn" id="firstPickBtn">
+                    ⚡ 先选（1-2-2-1-1-2-2-1）
+                </button>
+                <button onclick="chooseOrder('second')" class="choice-btn" id="secondPickBtn">
+                    🛡️ 后选（2-1-1-2-2-1-1-2）
+                </button>
+            </div>
+        </div>
+
+        <!-- 第7步：选人区域 -->
         <div id="draftArea" class="area" style="display: none;">
             <div class="teams">
                 <div class="team team1">
-                    <h2>🔵 蓝队</h2>
+                    <h2 id="team1Title">🔵 蓝队</h2>
                     <div id="team1Players" class="team-players"></div>
                 </div>
                 <div class="team team2">
-                    <h2>🔴 红队</h2>
+                    <h2 id="team2Title">🔴 红队</h2>
                     <div id="team2Players" class="team-players"></div>
                 </div>
             </div>
@@ -49,8 +137,6 @@
                 <h3>可选玩家</h3>
                 <div id="availablePlayers" class="player-grid"></div>
             </div>
-
-            <button onclick="resetToSelection()" class="reset-btn">← 重新选择参赛者</button>
         </div>
 
         <!-- 错误提示 -->
@@ -61,6 +147,10 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <script src="script.js"></script>
 </body>
 </html>
