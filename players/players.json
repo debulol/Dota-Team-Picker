@@ -18,57 +18,70 @@
     "heroes": ["shredder", "slardar", "axe"]
   },
   {
-    "name": "玩家4",
-    "avatar": "player4.jpg",
-    "position": "4号位",
-    "heroes": []
+    "name": "GBC",
+    "avatar": "GBC.jpg",
+    "position": "3,4,5号位",
+    "heroes": ["lion","jakiro","axe"]
   },
   {
-    "name": "玩家5",
-    "avatar": "player5.jpg",
-    "position": "5号位",
-    "heroes": []
+    "name": "三哥",
+    "avatar": "三哥.jpg",
+    "position": "1，3号位",
+    "heroes": ["weaver","underlord"]
   },
   {
-    "name": "玩家6",
-    "avatar": "player6.jpg",
+    "name": "四哥",
+    "avatar": "四哥.jpg",
+    "position": "4，5号位",
+    "heroes": ["oracle","shadow_demon","grimstroke"]
+  },
+  {
+    "name": "原酱",
+    "avatar": "原酱.jpg",
+    "position": "4，5号位",
+    "heroes": ["grimstroke","furion","ogre_magi"]
+  },
+  {
+    "name": "黄sir",
+    "avatar": "黄sir.jpg",
     "position": "1号位",
-    "heroes": []
+    "heroes": ["antimage","clinkz","tiny"]
   },
   {
-    "name": "玩家7",
-    "avatar": "player7.jpg",
+    "name": "YJF",
+    "avatar": "YJF.jpg",
+    "position": "4，5号位",
+    "heroes": ["ogre_magi","vengefulspirit","sniper"]
+  },
+  {
+    "name": "K",
+    "avatar": "八木唯.jpg",
     "position": "2号位",
-    "heroes": []
+    "heroes": ["storm_spirit","puck","skywrath_mage"]
   },
   {
-    "name": "玩家8",
-    "avatar": "player8.jpg",
-    "position": "3号位",
-    "heroes": []
+    "name": "老哥",
+    "avatar": "老哥.jpg",
+    "position": "4，5",
+    "heroes": ["lich"]
   },
   {
-    "name": "玩家9",
-    "avatar": "player9.jpg",
-    "position": "4号位",
-    "heroes": []
+    "name": "chase",
+    "avatar": "chase.jpg",
+    "position": "2，3号位",
+    "heroes": ["dawnbreaker","slardar","queenofpain"]
   },
   {
-    "name": "玩家10",
-    "avatar": "player10.jpg",
-    "position": "5号位",
-    "heroes": []
+    "name": "once",
+    "avatar": "once.jpg",
+    "position": "4，5",
+    "heroes": ["snapfire", "pugna", "lion"]
   },
   {
-    "name": "玩家11",
-    "avatar": "player11.jpg",
-    "position": "全能",
-    "heroes": []
-  },
-  {
-    "name": "玩家12",
-    "avatar": "player12.jpg",
-    "position": "2/3号位",
-    "heroes": []
-  }
+    "name": "Ding",
+    "avatar": "Ding.jpg",
+    "position": "全能之神",
+    "heroes": ["spirit_breaker", "ursa", "furion   "]
+  } 
+
 ]
