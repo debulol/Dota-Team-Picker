@@ -9,19 +9,16 @@ const firebaseConfig = {
   appId: "1:155275449613:web:28984455ebd7ec3384cc44"
 };
 
-// 初始化 Firebase
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // ========== 全局变量 ==========
-let playerPool = []; // 从配置文件加载的玩家库
-let selectedPlayers = []; // 本次选择的10名玩家
-let currentRoomId = null; // 当前房间ID
-let currentUserId = null; // 当前用户ID
-let roomRef = null; // 当前房间的数据库引用
-let myPlayerName = null; // 当前用户选择的玩家名字
+let playerPool = [];
+let myPlayer = null; // 我选择的玩家
+let currentRoomId = null;
+let currentUserId = null;
+let roomRef = null;
 
-// DOTA2 英雄图标 CDN
 const HERO_IMAGE_URL = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/';
 
 // ========== 页面加载 ==========
@@ -30,17 +27,14 @@ window.addEventListener('DOMContentLoaded', function() {
     loadPlayerData();
 });
 
-// 生成用户ID
 function generateUserId() {
     return 'user_' + Math.random().toString(36).substr(2, 9);
 }
 
-// 生成房间ID
 function generateRoomId() {
     return Math.random().toString(36).substr(2, 6).toUpperCase();
 }
 
-// 从 players.json 加载玩家数据
 async function loadPlayerData() {
     try {
         const response = await fetch('players/players.json');
@@ -56,8 +50,8 @@ async function loadPlayerData() {
         }
         
         document.getElementById('loadingArea').style.display = 'none';
-        document.getElementById('selectionArea').style.display = 'block';
-        updateSelectionDisplay();
+        document.getElementById('selectMeArea').style.display = 'block';
+        updatePlayerSelection();
         
     } catch (error) {
         console.error('加载失败:', error);
@@ -96,15 +90,15 @@ function getHeroesHTML(heroes, size = 'normal') {
     `).join('');
 }
 
-// ========== 第1步：选择参赛者 ==========
-function updateSelectionDisplay() {
+// ========== 第1步：选择我的玩家 ==========
+function updatePlayerSelection() {
     const selectionDiv = document.getElementById('playerSelection');
     
     selectionDiv.innerHTML = playerPool.map(player => {
-        const isSelected = selectedPlayers.some(p => p.name === player.name);
+        const isSelected = myPlayer && myPlayer.name === player.name;
         return `
             <div class="player-card ${isSelected ? 'selected' : ''}" 
-                 onclick='togglePlayer(${JSON.stringify(player).replace(/'/g, "&#39;")})'>
+                 onclick='selectMyPlayer(${JSON.stringify(player).replace(/'/g, "&#39;")})'>
                 <div class="avatar-section">
                     <img class="avatar" 
                          src="players/${player.avatar}" 
@@ -122,71 +116,55 @@ function updateSelectionDisplay() {
             </div>
         `;
     }).join('');
-    
-    document.getElementById('selectedCount').textContent = selectedPlayers.length;
-    document.getElementById('startDraftBtn').disabled = selectedPlayers.length !== 10;
 }
 
-function togglePlayer(player) {
-    const index = selectedPlayers.findIndex(p => p.name === player.name);
+function selectMyPlayer(player) {
+    myPlayer = player;
     
-    if (index !== -1) {
-        selectedPlayers.splice(index, 1);
-    } else {
-        if (selectedPlayers.length >= 10) {
-            alert('已经选择了10名玩家！');
-            return;
-        }
-        selectedPlayers.push(player);
-    }
+    // 显示我的玩家卡片
+    document.getElementById('myPlayerCard').innerHTML = `
+        <img class="avatar" 
+             src="players/${player.avatar}" 
+             alt="${player.name}"
+             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=26de81&color=fff&size=100'">
+        <div class="name">${player.name}</div>
+        <span class="position">${player.position}</span>
+        <div class="heroes">
+            ${getHeroesHTML(player.heroes)}
+        </div>
+    `;
     
-    updateSelectionDisplay();
-}
-
-function goToRoomSetup() {
-    if (selectedPlayers.length !== 10) {
-        alert('请选择正好10名玩家！');
-        return;
-    }
-    
-    document.getElementById('selectionArea').style.display = 'none';
+    // 切换到房间设置
+    document.getElementById('selectMeArea').style.display = 'none';
     document.getElementById('roomSetupArea').style.display = 'block';
 }
 
-function backToSelection() {
+function backToSelectMe() {
+    myPlayer = null;
     document.getElementById('roomSetupArea').style.display = 'none';
-    document.getElementById('selectionArea').style.display = 'block';
+    document.getElementById('selectMeArea').style.display = 'block';
+    updatePlayerSelection();
 }
 
 // ========== 第2步：房间管理 ==========
 async function createRoom() {
-    currentRoomId = generateRoomId();
-    
-    // 让用户选择自己的玩家
-    const playerName = prompt('请选择你的玩家名字（从已选择的10人中）：\n' + 
-        selectedPlayers.map((p, i) => `${i+1}. ${p.name}`).join('\n'));
-    
-    const player = selectedPlayers.find(p => p.name.includes(playerName) || playerName.includes(p.name));
-    if (!player) {
-        alert('未找到该玩家，请重试');
+    if (!myPlayer) {
+        alert('请先选择你的玩家');
         return;
     }
     
-    myPlayerName = player.name;
+    currentRoomId = generateRoomId();
     
-    // 创建房间数据
     const roomData = {
         roomId: currentRoomId,
-        players: selectedPlayers,
         participants: {
             [currentUserId]: {
                 userId: currentUserId,
-                playerName: player.name,
-                ready: true,
+                player: myPlayer,
                 joinedAt: Date.now()
             }
         },
-        status: 'waiting', // waiting, rolling, captain_choice, order_choice, drafting, completed
+        status: 'waiting',
         createdAt: Date.now()
     };
     
@@ -203,6 +181,11 @@ async function createRoom() {
 }
 
 async function joinRoom() {
+    if (!myPlayer) {
+        alert('请先选择你的玩家');
+        return;
+    }
+    
     const roomId = document.getElementById('roomIdInput').value.toUpperCase().trim();
     
     if (!roomId || roomId.length !== 6) {
@@ -219,34 +202,27 @@ async function joinRoom() {
             return;
         }
         
-        // 让用户选择自己的玩家
-        const playerName = prompt('请选择你的玩家名字（从房间的10人中）：\n' + 
-            roomData.players.map((p, i) => `${i+1}. ${p.name}`).join('\n'));
-        
-        const player = roomData.players.find(p => p.name.includes(playerName) || playerName.includes(p.name));
-        if (!player) {
-            alert('未找到该玩家，请重试');
-            return;
-        }
-        
         // 检查该玩家是否已被占用
         const participants = roomData.participants || {};
-        const isPlayerTaken = Object.values(participants).some(p => p.playerName === player.name);
+        const isPlayerTaken = Object.values(participants).some(p => p.player.name === myPlayer.name);
         
         if (isPlayerTaken) {
-            alert('该玩家已被其他用户选择，请选择其他玩家');
+            alert('该玩家已被其他用户选择，请重新选择玩家');
+            backToSelectMe();
             return;
         }
         
-        myPlayerName = player.name;
-        currentRoomId = roomId;
-        selectedPlayers = roomData.players;
+        // 检查房间是否已满
+        if (Object.keys(participants).length >= 10) {
+            alert('房间已满（10/10）');
+            return;
+        }
         
-        // 加入房间
+        currentRoomId = roomId;
+        
         await database.ref('rooms/' + roomId + '/participants/' + currentUserId).set({
             userId: currentUserId,
-            playerName: player.name,
-            ready: true,
+            player: myPlayer,
             joinedAt: Date.now()
         });
         
@@ -275,14 +251,19 @@ function updateRoomDisplay(roomData) {
     const status = roomData.status;
     const participants = roomData.participants || {};
     
-    // 更新参与者列表
     const participantCount = Object.keys(participants).length;
     document.getElementById('participantCount').textContent = participantCount;
     
+    // 显示参与者卡片
     const participantsList = document.getElementById('participantsList');
     participantsList.innerHTML = Object.values(participants).map(p => `
-        <div class="participant-item ${p.ready ? 'ready' : ''}">
-            ${p.playerName}
+        <div class="participant-card">
+            <img class="avatar" 
+                 src="players/${p.player.avatar}" 
+                 alt="${p.player.name}"
+                 onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.player.name)}&background=26de81&color=fff&size=60'">
+            <div class="name">${p.player.name}</div>
+            <div class="position">${p.player.position}</div>
         </div>
     `).join('');
     
@@ -294,7 +275,6 @@ function updateRoomDisplay(roomData) {
         document.getElementById('orderChoiceArea').style.display = 'none';
         document.getElementById('draftArea').style.display = 'none';
         
-        // 只有10人到齐才能开始
         document.getElementById('startRollBtn').disabled = participantCount !== 10;
     } else if (status === 'rolling') {
         document.getElementById('waitingArea').style.display = 'none';
@@ -330,7 +310,6 @@ function leaveRoom() {
         }
         
         currentRoomId = null;
-        myPlayerName = null;
         
         document.getElementById('waitingArea').style.display = 'none';
         document.getElementById('roomSetupArea').style.display = 'block';
@@ -352,13 +331,14 @@ async function startRoll() {
 }
 
 async function rollDice() {
-    if (!currentRoomId || !myPlayerName) return;
+    if (!currentRoomId || !myPlayer) return;
     
-    const rollValue = Math.floor(Math.random() * 101); // 0-100
+    const rollValue = Math.floor(Math.random() * 101);
     
     try {
-        await database.ref('rooms/' + currentRoomId + '/rolls/' + myPlayerName).set({
-            playerName: myPlayerName,
+        await database.ref('rooms/' + currentRoomId + '/rolls/' + myPlayer.name).set({
+            playerName: myPlayer.name,
+            player: myPlayer,
             value: rollValue,
             rolledAt: Date.now()
         });
@@ -374,8 +354,7 @@ function updateRollDisplay(roomData) {
     const rolls = roomData.rolls || {};
     const rollArray = Object.values(rolls);
     
-    // 更新我的 Roll 点
-    const myRoll = rolls[myPlayerName];
+    const myRoll = rolls[myPlayer.name];
     if (myRoll) {
         document.getElementById('myRoll').textContent = myRoll.value.toString().padStart(3, '0');
         document.getElementById('rollBtn').disabled = true;
@@ -384,10 +363,8 @@ function updateRollDisplay(roomData) {
         document.getElementById('rollBtn').disabled = false;
     }
     
-    // 排序 Roll 结果
     rollArray.sort((a, b) => b.value - a.value);
     
-    // 显示 Roll 结果
     const rollList = document.getElementById('rollResultsList');
     rollList.innerHTML = rollArray.map((roll, index) => {
         const isCaptain = index < 2;
@@ -399,15 +376,12 @@ function updateRollDisplay(roomData) {
         `;
     }).join('');
     
-    // 检查是否所有人都 Roll 完了
     if (rollArray.length === 10 && !roomData.captains) {
-        // 自动选出队长
         setTimeout(() => {
             selectCaptains(rollArray);
         }, 2000);
     }
     
-    // 显示队长公告
     if (roomData.captains) {
         document.getElementById('captainsAnnouncement').style.display = 'block';
         document.getElementById('captainsDisplay').innerHTML = `
@@ -423,10 +397,6 @@ async function selectCaptains(rollArray) {
     const captain1 = rollArray[0];
     const captain2 = rollArray[1];
     
-    // 获取完整玩家信息
-    const captain1Player = selectedPlayers.find(p => p.name === captain1.playerName);
-    const captain2Player = selectedPlayers.find(p => p.name === captain2.playerName);
-    
     try {
         await database.ref('rooms/' + currentRoomId).update({
             status: 'captain_choice',
@@ -434,12 +404,12 @@ async function selectCaptains(rollArray) {
                 captain1: {
                     name: captain1.playerName,
                     roll: captain1.value,
-                    player: captain1Player
+                    player: captain1.player
                 },
                 captain2: {
                     name: captain2.playerName,
                     roll: captain2.value,
-                    player: captain2Player
+                    player: captain2.player
                 }
             }
         });
@@ -456,12 +426,10 @@ function updateCaptainChoiceDisplay(roomData) {
     document.getElementById('firstCaptainName').textContent = captains.captain1.name;
     document.getElementById('firstCaptainRoll').textContent = captains.captain1.roll;
     
-    // 只有第一队长可以选择
-    const isFirstCaptain = myPlayerName === captains.captain1.name;
+    const isFirstCaptain = myPlayer.name === captains.captain1.name;
     document.getElementById('choiceOrderBtn').disabled = !isFirstCaptain;
     document.getElementById('choiceSideBtn').disabled = !isFirstCaptain;
     
-    // 显示选择结果
     if (roomData.captainChoice) {
         const choice = roomData.captainChoice;
         document.getElementById('captainChoiceResult').style.display = 'block';
@@ -480,7 +448,6 @@ async function captainChoose(choice) {
         });
         
         if (choice === 'side') {
-            // 选择阵营
             const side = confirm('选择阵营：\n确定 = 天辉（蓝队）\n取消 = 夜魇（红队）');
             
             await database.ref('rooms/' + currentRoomId).update({
@@ -488,7 +455,6 @@ async function captainChoose(choice) {
                 sideChoice: side ? 'radiant' : 'dire'
             });
         } else {
-            // 选择顺序
             await database.ref('rooms/' + currentRoomId).update({
                 status: 'order_choice'
             });
@@ -503,17 +469,16 @@ function updateOrderChoiceDisplay(roomData) {
     const captains = roomData.captains;
     const captainChoice = roomData.captainChoice;
     
-    // 根据第一队长的选择，决定谁选择顺序
     let orderChooser;
     if (captainChoice === 'order') {
-        orderChooser = captains.captain1.name; // 第一队长选顺序
+        orderChooser = captains.captain1.name;
     } else {
-        orderChooser = captains.captain2.name; // 第二队长选顺序
+        orderChooser = captains.captain2.name;
     }
     
     document.getElementById('orderCaptainName').textContent = orderChooser;
     
-    const canChoose = myPlayerName === orderChooser;
+    const canChoose = myPlayer.name === orderChooser;
     document.getElementById('firstPickBtn').disabled = !canChoose;
     document.getElementById('secondPickBtn').disabled = !canChoose;
 }
@@ -525,12 +490,14 @@ async function chooseOrder(order) {
     const captains = roomData.captains;
     const captainChoice = roomData.captainChoice;
     const sideChoice = roomData.sideChoice;
+    const participants = roomData.participants;
     
-    // 确定队伍分配
+    // 获取所有10名玩家
+    const allPlayers = Object.values(participants).map(p => p.player);
+    
     let team1Captain, team2Captain, pickOrder;
     
     if (captainChoice === 'order') {
-        // 第一队长选了顺序
         if (order === 'first') {
             team1Captain = captains.captain1;
             team2Captain = captains.captain2;
@@ -541,7 +508,6 @@ async function chooseOrder(order) {
             pickOrder = [2, 1, 1, 2, 2, 1, 1, 2];
         }
     } else {
-        // 第一队长选了阵营
         if (sideChoice === 'radiant') {
             team1Captain = captains.captain1;
             team2Captain = captains.captain2;
@@ -551,14 +517,13 @@ async function chooseOrder(order) {
         }
         
         if (order === 'first') {
-            pickOrder = [2, 1, 1, 2, 2, 1, 1, 2]; // 第二队长先选
+            pickOrder = [2, 1, 1, 2, 2, 1, 1, 2];
         } else {
-            pickOrder = [1, 2, 2, 1, 1, 2, 2, 1]; // 第一队长先选
+            pickOrder = [1, 2, 2, 1, 1, 2, 2, 1];
         }
     }
     
-    // 从 selectedPlayers 中移除两个队长
-    const availablePlayers = selectedPlayers.filter(
+    const availablePlayers = allPlayers.filter(
         p => p.name !== team1Captain.name && p.name !== team2Captain.name
     );
     
@@ -590,11 +555,9 @@ function updateDraftDisplay(roomData) {
     const pickOrder = roomData.pickOrder || [];
     const currentPickIndex = roomData.currentPickIndex || 0;
     
-    // 更新队名
     document.getElementById('team1Title').textContent = `🔵 ${team1.captain.name} 的队伍`;
     document.getElementById('team2Title').textContent = `🔴 ${team2.captain.name} 的队伍`;
     
-    // 更新队伍显示
     document.getElementById('team1Players').innerHTML = team1.players.map((player, index) => `
         <div class="team-player">
             <img class="avatar-small" 
@@ -627,14 +590,12 @@ function updateDraftDisplay(roomData) {
         </div>
     `).join('');
     
-    // 检查是否选人完成
     if (currentPickIndex >= pickOrder.length) {
         document.getElementById('currentTurn').innerHTML = '✅ 选人完成！';
         document.getElementById('availablePlayers').innerHTML = '';
         return;
     }
     
-    // 显示当前轮次
     const currentTeam = pickOrder[currentPickIndex];
     const currentCaptain = currentTeam === 1 ? team1.captain : team2.captain;
     const teamName = currentTeam === 1 ? '🔵 ' + team1.captain.name : '🔴 ' + team2.captain.name;
@@ -642,8 +603,7 @@ function updateDraftDisplay(roomData) {
     document.getElementById('currentTurn').innerHTML = 
         `当前回合：${teamName} - 队长 <strong>${currentCaptain.name}</strong> 请选择队员`;
     
-    // 显示可选玩家
-    const canPick = myPlayerName === currentCaptain.name;
+    const canPick = myPlayer.name === currentCaptain.name;
     const playersDiv = document.getElementById('availablePlayers');
     playersDiv.innerHTML = availablePlayers.map(player => `
         <div class="available-player ${canPick ? '' : 'disabled'}" 
@@ -669,12 +629,10 @@ async function pickPlayer(player) {
     const currentPickIndex = roomData.currentPickIndex;
     const currentTeam = pickOrder[currentPickIndex];
     
-    // 更新队伍
     const teamKey = currentTeam === 1 ? 'team1' : 'team2';
     const team = roomData[teamKey];
     team.players.push(player);
     
-    // 从可选列表移除
     const availablePlayers = roomData.availablePlayers.filter(p => p.name !== player.name);
     
     try {
